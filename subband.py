@@ -1,5 +1,5 @@
 """
-script to cut pulsar data into subbands,and convert to filterbank or fits format
+script to cut FAST psrfits pulsar data into subbands (optionally),and convert to filterbank or fits format
 filterbank files using astropy/your
 
 
