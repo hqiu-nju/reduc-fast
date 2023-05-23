@@ -17,6 +17,7 @@ def _main():
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='Be verbose')
     parser.add_argument('-o', '--output', type=str, default="test", help='Output File Name')
     parser.add_argument('-N', '--segments', type=int, default=20, help='how many files per filterbank segment')
+    parser.add_argument('-s', '--samples-per-file', dest='samples', type=int, default=65536, help='Nubmer of time samples to read per input file, set to < 1 to read all data')
     parser.add_argument('-r', '--ra', dest = 'ra', default = 123456.78, type=float, help = "Source RAJ")
     parser.add_argument('-d', '--dec', dest = 'dec', default = -123456.78, type=float, help = "Source RAJ")
     parser.add_argument('-n', '--src', dest = 'src', default = "", type=str, help = "Source Name")
@@ -31,12 +32,12 @@ def _main():
     # print(values.files,fillength,inject_iter)
     for i in range(inject_iter):
         print(f"reading files {values.files[i*seg:(i+1)*seg]}, writing to {filname}_{i}.fil")
-        write_filterbanks(values.files[i*seg:(i+1)*seg],f"{filname}_{i}.fil",65536,values.ra,values.dec,values.src)
+        write_filterbanks(values.files[i*seg:(i+1)*seg],f"{filname}_{i}.fil",values.samples,values.ra,values.dec,values.src)
 
 
 
 
-def write_filterbanks(files,filname,total_length=65536, raj = 123456.78, decj = -123456.78, name = None):
+def write_filterbanks(files,filname,total_length=0, raj = 123456.78, decj = -123456.78, name = None):
     from your.formats.filwriter import make_sigproc_object
     for i,filename in enumerate(files):
         fbank= your.Your(filename)
@@ -64,7 +65,8 @@ def write_filterbanks(files,filname,total_length=65536, raj = 123456.78, decj = 
                                         za_start=-1
                                         )
             newdata.write_header(filname)
-
+        if total_length < 1:
+                total_length = fbank.nspec
         print(filename)
         totaldata=fbank.get_data(nstart=0,nsamp=total_length) ### TOTAL FAST DATA IS 1024 * 64 SUBINTS
         ### reads out stokes I data
