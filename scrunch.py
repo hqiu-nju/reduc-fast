@@ -34,14 +34,14 @@ def _main():
     fb= your.Your(values.file)
     newdata=make_sigproc_object(rawdatafile  = filname,
                                 telescope_id = 21, # FAST according to PRESTO
-                                source_name = values.src or (fbank.source_name.decode() if isinstance(fbank.source_name, bytes) else fbank.source_name),
+                                source_name = values.src or (fb.source_name.decode() if isinstance(fb.source_name, bytes) else fb.source_name),
                                 nchans  = fb.nchans//values.fbin,
                                 foff = fb.foff*values.fbin, #MHz
                                 fch1 = fb.fch1, # MHz
                                 tsamp = fb.native_tsamp*values.tbin, # seconds
                                 tstart = fb.tstart, #MJD
-                                src_raj=raj, # HHMMSS.SS
-                                src_dej=decj, # DDMMSS.SS
+                                src_raj=values.ra, # HHMMSS.SS
+                                src_dej=values.dec, # DDMMSS.SS
                                 machine_id=0,
                                 nbeams=1,
                                 ibeam=0,
