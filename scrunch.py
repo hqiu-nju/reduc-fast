@@ -20,7 +20,9 @@ def _main():
     parser.add_argument('-c','--fbin',type=int, default=1,help='fscrunch channels per bin')
     parser.add_argument('-s','--samples',type=int, default=6553600,help='file sample length')
     parser.add_argument('-S','--seglen',type=int, default=1000,help='read in segment sample length factor, read in length is tbin*seglen')
-
+    parser.add_argument('-r', '--ra', dest = 'ra', default = 123456.78, type=float, help = "Source RAJ")
+    parser.add_argument('-d', '--dec', dest = 'dec', default = -123456.78, type=float, help = "Source RAJ")
+    parser.add_argument('-n', '--src', dest = 'src', default = "", type=str, help = "Source Name")
 
 
     ## your has not implemented this feature yet
@@ -31,14 +33,15 @@ def _main():
     filname=values.output
     fb= your.Your(values.file)
     newdata=make_sigproc_object(rawdatafile  = filname,
-                                source_name = fb.source_name.decode(),
+                                telescope_id = 21, # FAST according to PRESTO
+                                source_name = values.src or (fbank.source_name.decode() if isinstance(fbank.source_name, bytes) else fbank.source_name),
                                 nchans  = fb.nchans//values.fbin,
                                 foff = fb.foff*values.fbin, #MHz
                                 fch1 = fb.fch1, # MHz
-                                tsamp = fb.tsamp*values.tbin, # seconds
+                                tsamp = fb.native_tsamp*values.tbin, # seconds
                                 tstart = fb.tstart, #MJD
-                                src_raj=123456.78, # HHMMSS.SS
-                                src_dej=-123456.78, # DDMMSS.SS
+                                src_raj=raj, # HHMMSS.SS
+                                src_dej=decj, # DDMMSS.SS
                                 machine_id=0,
                                 nbeams=1,
                                 ibeam=0,

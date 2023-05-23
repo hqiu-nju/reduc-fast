@@ -15,9 +15,11 @@ def _main():
     from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
     parser = ArgumentParser(description='Script description', formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='Be verbose')
-    parser.add_argument('-o', '--output',type=str, default="test",help='Output File Name')
-    parser.add_argument('-N','--segments',type=int, default=20,help='how many files per filterbank segment')
-    # parser.add_argument('--nsamp',type=int, default=20,help='how many files per filterbank segment')
+    parser.add_argument('-o', '--output', type=str, default="test", help='Output File Name')
+    parser.add_argument('-N', '--segments', type=int, default=20, help='how many files per filterbank segment')
+    parser.add_argument('-r', '--ra', dest = 'ra', default = 123456.78, type=float, help = "Source RAJ")
+    parser.add_argument('-d', '--dec', dest = 'dec', default = -123456.78, type=float, help = "Source RAJ")
+    parser.add_argument('-n', '--src', dest = 'src', default = "", type=str, help = "Source Name")
 
     parser.add_argument(dest='files', nargs='+')
     parser.set_defaults(verbose=False)
@@ -29,27 +31,28 @@ def _main():
     # print(values.files,fillength,inject_iter)
     for i in range(inject_iter):
         print(f"reading files {values.files[i*seg:(i+1)*seg]}, writing to {filname}_{i}.fil")
-        write_filterbanks(files=values.files[i*seg:(i+1)*seg],filname=f"{filname}_{i}.fil")
+        write_filterbanks(values.files[i*seg:(i+1)*seg],f"{filname}_{i}.fil",65536,values.ra,values.dec,values.src)
 
 
 
 
-def write_filterbanks(files,filname,total_length=65536):
+def write_filterbanks(files,filname,total_length=65536, raj = 123456.78, decj = -123456.78, name = None):
     from your.formats.filwriter import make_sigproc_object
     for i,filename in enumerate(files):
         fbank= your.Your(filename)
         if i ==0:
             print()
             newdata=make_sigproc_object(rawdatafile=filname,
-                                        source_name = fbank.source_name.decode(),
+                                        telescope_id = 21, # FAST according to PRESTO
+                                        source_name = name or (fbank.source_name.decode() if isinstance(fbank.source_name, bytes) else fbank.source_name),
                                         nchans = fbank.nchans,
                                         foff = fbank.foff,
                                         fch1 = fbank.fch1,
-                                        tsamp =fbank.tsamp,
+                                        tsamp =fbank.native_tsamp,
                                         tstart = fbank.tstart,
                                         nbits=8,
-                                        src_raj=123456.78, # HHMMSS.SS
-                                        src_dej=-123456.78, # DDMMSS.SS
+                                        src_raj=raj, # HHMMSS.SS
+                                        src_dej=decj, # DDMMSS.SS
                                         machine_id=0,
                                         nbeams=1,
                                         ibeam=0,
