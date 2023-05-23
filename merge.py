@@ -18,8 +18,8 @@ def _main():
     parser.add_argument('-o', '--output', type=str, default="test", help='Output File Name')
     parser.add_argument('-N', '--segments', type=int, default=20, help='how many files per filterbank segment')
     parser.add_argument('-s', '--samples-per-file', dest='samples', type=int, default=65536, help='Nubmer of time samples to read per input file, set to < 1 to read all data')
-    parser.add_argument('-r', '--ra', dest = 'ra', default = 123456.78, type=float, help = "Source RAJ")
-    parser.add_argument('-d', '--dec', dest = 'dec', default = -123456.78, type=float, help = "Source RAJ")
+    parser.add_argument('-r', '--ra', dest = 'ra', default = 123456.78, type=float, help = "Source RAJ (HHMMSS.sss)")
+    parser.add_argument('-d', '--dec', dest = 'dec', default = -123456.78, type=float, help = "Source RAJ (DDMMSS.sss")
     parser.add_argument('-n', '--src', dest = 'src', default = "", type=str, help = "Source Name")
 
     parser.add_argument(dest='files', nargs='+')

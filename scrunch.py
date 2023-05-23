@@ -20,8 +20,8 @@ def _main():
     parser.add_argument('-c','--fbin',type=int, default=1,help='fscrunch channels per bin')
     parser.add_argument('-s','--samples',type=int, default=6553600,help='file sample length')
     parser.add_argument('-S','--seglen',type=int, default=1000,help='read in segment sample length factor, read in length is tbin*seglen')
-    parser.add_argument('-r', '--ra', dest = 'ra', default = 123456.78, type=float, help = "Source RAJ")
-    parser.add_argument('-d', '--dec', dest = 'dec', default = -123456.78, type=float, help = "Source RAJ")
+    parser.add_argument('-r', '--ra', dest = 'ra', default = 123456.78, type=float, help = "Source RAJ (HHMMSS.sss)")
+    parser.add_argument('-d', '--dec', dest = 'dec', default = -123456.78, type=float, help = "Source RAJ (DDMMSS.sss")
     parser.add_argument('-n', '--src', dest = 'src', default = "", type=str, help = "Source Name")
 
 
