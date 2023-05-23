@@ -39,6 +39,7 @@ def _main():
 
 def write_filterbanks(files,filname,total_length=0, raj = 123456.78, decj = -123456.78, name = None):
     from your.formats.filwriter import make_sigproc_object
+    cached_total_length = total_length
     for i,filename in enumerate(files):
         fbank= your.Your(filename)
         if i ==0:
@@ -65,7 +66,7 @@ def write_filterbanks(files,filname,total_length=0, raj = 123456.78, decj = -123
                                         za_start=-1
                                         )
             newdata.write_header(filname)
-        if total_length < 1:
+        if cached_total_length < 1:
                 total_length = fbank.nspec
         print(filename)
         totaldata=fbank.get_data(nstart=0,nsamp=total_length) ### TOTAL FAST DATA IS 1024 * 64 SUBINTS
