@@ -4,6 +4,7 @@ script to connect filterbank files
 headers are automatically generated mock information, alter if necessary
 """
 import your
+import logging
 import numpy as np
 import os
 __author__ = "Harry Qiu"
@@ -73,6 +74,20 @@ def write_filterbanks(files,filname,total_length=0, raj = 123456.78, decj = -123
         ### reads out stokes I data
         ### this step reads all subints to merge into one datachunk, can't stop printing subint readouts
         newdata.append_spectra(totaldata.astype(np.int8),filname)
+
+# Silence the Polarization is AABB..." spam
+logger = logging.getLogger(your.formats.psrfits.__name__)
+class NoPolWarningFilter(logging.Filter):
+    parsed = False
+    def filter(self, record):
+        returnVal = record.getMessage().startswith('Polarization is ')
+        if returnVal:
+            if not self.parsed:
+                self.parsed = True
+            else:
+                return False
+        return True
+logger.addFilter(NoPolWarningFilter())
 
 if __name__ == '__main__':
     _main()
