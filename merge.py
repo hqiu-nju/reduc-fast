@@ -9,7 +9,8 @@ import numpy as np
 import os
 __author__ = "Harry Qiu"
 from your.formats.filwriter import make_sigproc_object
-
+from astropy.coordinates import SkyCoord
+from astropy import units as u
 # filelist=np.loadtxt("filelist",dtype='str')
 
 def _main():
@@ -45,6 +46,9 @@ def write_filterbanks(files,filname,total_length=0, raj = 123456.78, decj = -123
         fbank= your.Your(filename)
         if i ==0:
             print()
+            c=SkyCoord(ra=fbank.ra_deg*u.deg,dec=fbank.dec_deg*u.deg)
+            raj=c.ra.to_string(u.hourangle,precision=2,sep=':')
+            decj=c.dec.to_string(u.deg,precision=2,sep=':')
             newdata=make_sigproc_object(rawdatafile=filname,
                                         telescope_id = 21, # FAST according to PRESTO
                                         source_name = name or (fbank.source_name.decode() if isinstance(fbank.source_name, bytes) else fbank.source_name),
