@@ -1,7 +1,7 @@
 # reduc-fast
-data reduction tools for FAST observations
+data reduction tools for fast transient search observation data 
 
-
+Was developed for dealing with FAST observations, but works generically for psrfits and filterbank files
 ## dependencies
 your (https://thepetabyteproject.github.io/your/0.6.6/).
 
